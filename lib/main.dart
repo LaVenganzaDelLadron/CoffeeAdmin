@@ -1,8 +1,16 @@
+import 'package:admincoffee/controller/add_product_controller.dart';
+import 'package:admincoffee/controller/auth_controller.dart';
 import 'package:admincoffee/view/onboardingscreen/onboardingscreen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // 🔹 Register your controllers before app starts
+  Get.put(AuthController());
+  Get.put(AddProductController());
+
   runApp(const MyApp());
 }
 

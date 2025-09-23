@@ -1,3 +1,4 @@
+import 'package:admincoffee/view/dashboard/add_product.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 
@@ -76,7 +77,8 @@ class AdminDashboard extends StatelessWidget {
                   label: const Text("Add Product",
                       style: TextStyle(color: Colors.white)),
                   onPressed: () {
-                    // TODO: Add product logic
+                    Navigator.push(context, 
+                    MaterialPageRoute(builder: (context) => const AddProductPage()));
                   },
                 ),
                 ElevatedButton.icon(
