@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:admincoffee/controller/add_product_controller.dart';
 import 'package:admincoffee/controller/auth_controller.dart';
+import 'package:admincoffee/utils/debug_logger.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -24,50 +25,50 @@ class _AddProductPageState extends State<AddProductPage> {
 
   final ImagePicker _picker = ImagePicker();
 
-Future<void> _pickImage() async {
-  final picked = await _picker.pickImage(source: ImageSource.gallery);
-  if (picked != null) {
-    print("[DEBUG] Image Picked: ${picked.path}");
-    setState(() {
-      _imageFile = File(picked.path);
-    });
-  } else {
-    print("[DEBUG] No image selected");
-  }
-}
-
-Future<void> _submit() async {
-  if (_formKey.currentState!.validate()) {
-    if (_imageFile == null) {
-      print("[DEBUG] Form submit blocked → No image uploaded");
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Please upload an image")),
-      );
-      return;
+  Future<void> _pickImage() async {
+    final picked = await _picker.pickImage(source: ImageSource.gallery);
+    if (picked != null) {
+      DebugLogger.debug("Image Picked: ${picked.path}");
+      setState(() {
+        _imageFile = File(picked.path);
+      });
+    } else {
+      DebugLogger.warn("No image selected");
     }
-
-    final adminId =
-        AuthController.instance.currentAdmin.value?.id.toString() ?? "0";
-
-    print("[DEBUG] Submitting product form → adminId=$adminId");
-
-    await AddProductController.instance.addProduct(
-      _nameController.text,
-      _descController.text,
-      _categoryController.text,
-      double.tryParse(_priceController.text) ?? 0,
-      adminId,
-      _imageFile!,
-    );
-
-    _formKey.currentState!.reset();
-    setState(() {
-      _imageFile = null;
-      _status = "active";
-    });
-    print("[DEBUG] Form reset after submission");
   }
-}
+
+  Future<void> _submit() async {
+    if (_formKey.currentState!.validate()) {
+      if (_imageFile == null) {
+        DebugLogger.warn("Form submit blocked → No image uploaded");
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Please upload an image")),
+        );
+        return;
+      }
+
+      final adminId =
+          AuthController.instance.currentAdmin.value?.id.toString() ?? "0";
+
+      DebugLogger.info("Submitting product form → adminId=$adminId");
+
+      await AddProductController.instance.addProduct(
+        _nameController.text,
+        _descController.text,
+        _categoryController.text,
+        double.tryParse(_priceController.text) ?? 0,
+        adminId,
+        _imageFile!,
+      );
+
+      _formKey.currentState!.reset();
+      setState(() {
+        _imageFile = null;
+        _status = "active";
+      });
+      DebugLogger.debug("Form reset after submission");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -127,7 +128,7 @@ Future<void> _submit() async {
                 ),
                 const SizedBox(height: 12),
                 DropdownButtonFormField(
-                  initialValue: _status,
+                  value: _status,
                   items: const [
                     DropdownMenuItem(value: "active", child: Text("Active")),
                     DropdownMenuItem(value: "inactive", child: Text("Inactive")),

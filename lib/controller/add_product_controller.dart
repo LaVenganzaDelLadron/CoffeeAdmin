@@ -1,7 +1,8 @@
 import 'dart:io';
 import 'package:admincoffee/services/api_add_coffee.dart';
-import 'package:admincoffee/view/dialog/show_alert_dialog.dart';
+import 'package:admincoffee/utils/debug_logger.dart';
 import 'package:get/get.dart';
+
 
 class AddProductController extends GetxController {
   static AddProductController get instance => Get.find();
@@ -14,9 +15,8 @@ class AddProductController extends GetxController {
     String aid,
     File imageFile,
   ) async {
-    print("[DEBUG] Adding product → "
-        "name=$name, desc=$description, category=$category, price=$price, aid=$aid, "
-        "imagePath=${imageFile.path}");
+    DebugLogger.debug("Adding product → name=$name, desc=$description, "
+        "category=$category, price=$price, aid=$aid, imagePath=${imageFile.path}");
 
     try {
       final result = await ApiAddCoffee.addCoffee(
@@ -25,36 +25,18 @@ class AddProductController extends GetxController {
         category,
         price,
         aid,
-        imageFile,
+        imageFile.path,
       );
 
-      print("[DEBUG] API Response: $result");
+      DebugLogger.info("API Response: $result");
 
       if (result["coffee_id"] != null) {
-        print("[DEBUG] Product Added Successfully → Coffee ID: ${result["coffee_id"]}");
-
-        showAuthDialog(
-          title: "Product Added",
-          message: "Product $name added successfully",
-          isSuccess: true,
-        );
+        DebugLogger.info("✅ Product Added Successfully → Coffee ID: ${result["coffee_id"]}");
       } else {
-        print("[DEBUG] Failed to add product");
-
-        showAuthDialog(
-          title: "Failed to add product",
-          message: "Please try again",
-          isSuccess: false,
-        );
+        DebugLogger.warn("⚠️ Failed to add product → $result");
       }
-    } catch (e) {
-      print("[DEBUG] Error Adding Product: $e");
-
-      showAuthDialog(
-        title: "Error",
-        message: "Something went wrong $e",
-        isSuccess: false,
-      );
+    } catch (e, stack) {
+      DebugLogger.error("❌ Error Adding Product", e, stack);
     }
   }
 }
