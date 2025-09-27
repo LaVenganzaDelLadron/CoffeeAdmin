@@ -128,7 +128,7 @@ class _AddProductPageState extends State<AddProductPage> {
                 ),
                 const SizedBox(height: 12),
                 DropdownButtonFormField(
-                  value: _status,
+                  initialValue: _status,
                   items: const [
                     DropdownMenuItem(value: "active", child: Text("Active")),
                     DropdownMenuItem(value: "inactive", child: Text("Inactive")),
