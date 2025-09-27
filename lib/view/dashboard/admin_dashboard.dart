@@ -1,4 +1,5 @@
 import 'package:admincoffee/controller/auth_controller.dart';
+import 'package:admincoffee/controller/get_product_count_controller.dart';
 import 'package:admincoffee/view/dashboard/add_product.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -52,7 +53,22 @@ class AdminDashboard extends StatelessWidget {
               mainAxisSpacing: 12,
               physics: const NeverScrollableScrollPhysics(),
               children: [
-                _buildStatCard("Total Products", "120", Icons.local_cafe),
+                FutureBuilder<int>(
+                  future: GetProductCountController.instance.fetchProductCount(adminId),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return _buildStatCard("Total Products", "...", Icons.local_cafe);
+                    } else if (snapshot.hasError || !snapshot.hasData) {
+                      return _buildStatCard("Total Products", "0", Icons.local_cafe);
+                    } else {
+                      return _buildStatCard(
+                        "Total Products",
+                        snapshot.data.toString(),
+                        Icons.local_cafe,
+                      );
+                    }
+                  },
+                ),
                 _buildStatCard("Total Orders", "540", Icons.shopping_cart),
                 _buildStatCard("Pending Orders", "32", Icons.pending_actions),
                 _buildStatCard("Daily Sales", "\$450", Icons.attach_money),
