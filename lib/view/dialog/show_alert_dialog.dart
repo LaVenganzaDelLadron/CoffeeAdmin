@@ -71,7 +71,7 @@ void showAuthDialog({
                 onPressed: () {
                   Get.back();
                   if (isSuccess) {
-                    Get.offAll(() => const AdminDashboard());
+                    Get.offAll(() => AdminDashboard());
                   }
                 },
                 child: const Text("OK"),

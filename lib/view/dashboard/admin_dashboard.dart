@@ -1,6 +1,10 @@
+import 'package:admincoffee/controller/auth_controller.dart';
 import 'package:admincoffee/view/dashboard/add_product.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+
+final adminId =
+          AuthController.instance.currentAdmin.value?.id.toString() ?? "0";
 
 class AdminDashboard extends StatelessWidget {
   const AdminDashboard({super.key});

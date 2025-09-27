@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:admincoffee/services/api_add_coffee.dart';
+import 'package:admincoffee/services/api_coffee_services.dart';
 import 'package:admincoffee/utils/debug_logger.dart';
 import 'package:get/get.dart';
 
@@ -19,7 +19,7 @@ class AddProductController extends GetxController {
         "category=$category, price=$price, aid=$aid, imagePath=${imageFile.path}");
 
     try {
-      final result = await ApiAddCoffee.addCoffee(
+      final result = await ApiCoffeeServices.addCoffee(
         name,
         description,
         category,
