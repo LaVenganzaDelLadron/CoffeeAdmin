@@ -27,6 +27,5 @@ class GetProductCountController extends GetxController {
       DebugLogger.error("❌ Error Fetching Product Count", e, stack);
       return 0;
     }
-
   }
 }
