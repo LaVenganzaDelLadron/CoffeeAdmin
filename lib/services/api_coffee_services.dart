@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class ApiCoffeeServices {
-  static const String baseUrl = "http://192.168.1.14:8080";
+  static const String baseUrl = "http://192.168.1.6:8080";
 
   static Future<Map<String, dynamic>> addCoffee(
   String name,
@@ -47,4 +47,18 @@ static Future<Map<String, dynamic>> getProductCount(String aid) async {
           'Failed to fetch product count: ${response.statusCode} ${response.body}');
     }
   }
+
+static Future<List<dynamic>> getAllProduct(String aid) async {
+  final url = Uri.parse('$baseUrl/getproducts/$aid');
+  final response = await http.get(url);
+
+  if (response.statusCode == 200) {
+    return jsonDecode(response.body) as List<dynamic>;
+  } else {
+    throw Exception(
+      'Failed to fetch products: ${response.statusCode} ${response.body}',
+    );
+  }
+}
+
 }

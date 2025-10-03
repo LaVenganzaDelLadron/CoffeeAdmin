@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class ApiAuthServices {
-  static const String baseUrl = "http://192.168.1.14:8080";
+  static const String baseUrl = "http://192.168.1.6:8080";
 
   static Future<Map<String, dynamic>> signupUser(
       String username, String password) async {

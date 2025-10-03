@@ -1,13 +1,18 @@
 import 'package:admincoffee/controller/auth_controller.dart';
+import 'package:admincoffee/controller/get_product_controller.dart';
 import 'package:admincoffee/controller/get_product_count_controller.dart';
+import 'package:admincoffee/model/coffee.dart';
 import 'package:admincoffee/view/dashboard/add_product.dart';
+import 'package:admincoffee/view/dashboard/view_product.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 
 final adminId =
-          AuthController.instance.currentAdmin.value?.id.toString() ?? "0";
+    AuthController.instance.currentAdmin.value?.id.toString() ?? "0";
+
 
 class AdminDashboard extends StatelessWidget {
+  
   const AdminDashboard({super.key});
 
   @override
@@ -61,16 +66,29 @@ class AdminDashboard extends StatelessWidget {
                     } else if (snapshot.hasError || !snapshot.hasData) {
                       return _buildStatCard("Total Products", "0", Icons.local_cafe);
                     } else {
-                      return _buildStatCard(
-                        "Total Products",
-                        snapshot.data.toString(),
-                        Icons.local_cafe,
+                      return GestureDetector(
+                        onTap: () async {
+                            final products = await GetProductController.instance.fetchAllProducts(adminId);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => AllProductsPage(products: products),
+                              ),
+                            );
+                          },
+                        child: _buildStatCard(
+                          "Total Products",
+                          snapshot.data.toString(),
+                          Icons.local_cafe,
+                        ),
                       );
                     }
                   },
                 ),
+
                 _buildStatCard("Total Orders", "540", Icons.shopping_cart),
-                _buildStatCard("Pending Orders", "32", Icons.pending_actions),
+                _buildStatCard(
+                    "Pending Orders", "32", Icons.pending_actions),
                 _buildStatCard("Daily Sales", "\$450", Icons.attach_money),
               ],
             ),
@@ -97,8 +115,10 @@ class AdminDashboard extends StatelessWidget {
                   label: const Text("Add Product",
                       style: TextStyle(color: Colors.white)),
                   onPressed: () {
-                    Navigator.push(context, 
-                    MaterialPageRoute(builder: (context) => const AddProductPage()));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const AddProductPage()));
                   },
                 ),
                 ElevatedButton.icon(
@@ -160,23 +180,28 @@ class AdminDashboard extends StatelessWidget {
     );
   }
 
-  // Reusable stat card
-  Widget _buildStatCard(String title, String value, IconData icon) {
-    return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      elevation: 3,
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Icon(icon, size: 30, color: Colors.brown),
-            const SizedBox(height: 12),
-            Text(value,
-                style:
-                    const TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
-            Text(title, style: const TextStyle(color: Colors.grey)),
-          ],
+  // Reusable stat card with tap support
+  Widget _buildStatCard(
+      String title, String value, IconData icon,
+      {VoidCallback? onTap}) {
+    return InkWell(
+      onTap: onTap,
+      child: Card(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        elevation: 3,
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Icon(icon, size: 30, color: Colors.brown),
+              const SizedBox(height: 12),
+              Text(value,
+                  style: const TextStyle(
+                      fontSize: 22, fontWeight: FontWeight.bold)),
+              Text(title, style: const TextStyle(color: Colors.grey)),
+            ],
+          ),
         ),
       ),
     );

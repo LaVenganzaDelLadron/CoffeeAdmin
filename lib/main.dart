@@ -1,5 +1,6 @@
 import 'package:admincoffee/controller/add_product_controller.dart';
 import 'package:admincoffee/controller/auth_controller.dart';
+import 'package:admincoffee/controller/get_product_controller.dart';
 import 'package:admincoffee/controller/get_product_count_controller.dart';
 import 'package:admincoffee/view/onboardingscreen/onboardingscreen.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +9,7 @@ import 'package:get/get.dart';
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
+  Get.put(GetProductController());
   Get.put(GetProductCountController());
   Get.put(AuthController());
   Get.put(AddProductController());
