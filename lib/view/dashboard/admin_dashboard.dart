@@ -1,7 +1,6 @@
 import 'package:admincoffee/controller/auth_controller.dart';
 import 'package:admincoffee/controller/get_product_controller.dart';
 import 'package:admincoffee/controller/get_product_count_controller.dart';
-import 'package:admincoffee/model/coffee.dart';
 import 'package:admincoffee/view/dashboard/add_product.dart';
 import 'package:admincoffee/view/dashboard/view_product.dart';
 import 'package:flutter/material.dart';
